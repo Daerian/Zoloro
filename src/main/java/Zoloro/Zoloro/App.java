@@ -4,16 +4,14 @@
  */
 package Zoloro.Zoloro;
 
-import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import javax.security.auth.login.LoginException;
 
 public class App extends ListenerAdapter {
 
@@ -29,7 +27,6 @@ public class App extends ListenerAdapter {
 	} // End Main Method.
 
 	
-	
 	// MESSAGE RECEIVED MEATHOD -- For your own foolery, write any nonsense
 	@Override
 	public void onMessageReceived(MessageReceivedEvent e) {
@@ -43,17 +40,29 @@ public class App extends ListenerAdapter {
 		if (msg.getContentDisplay().equals("hello")) {
 			objChannel.sendMessage("What's up, " + objUser.getAsMention() + "? How's Godfrey's Booty?").queue();
 		}
-		if (msg.getContentDisplay().equals("iggy")) {
+		if (msg.getContentDisplay().equals("Iggy")) {
 			objChannel.sendMessage("Ahhh, derek's old bitch").queue();
 		}
-		if (msg.getContentDisplay().equals("derek")) {
+		if (msg.getContentDisplay().equals("Derek")) {
 			objChannel.sendMessage("Will you be my haram babyyy?").queue();
 		}
-		if (msg.getContentDisplay().equals("suren")) {
+		if (msg.getContentDisplay().equals("Suren")) {
 			objChannel.sendMessage("how traingularly vascular!").queue();
 		}
 		if (msg.getContentDisplay().equals("Zoloro")) {
 			objChannel.sendMessage("That's me! Daerian made me, Dae is Bae, right? :yum:").queue();
+		}
+		if (msg.getContentDisplay().equals("Godfrey")) {
+			objChannel.sendMessage("AIIIIIIMM TAAAIIIREEEDD ... What's 1000-7 ... PLEB?").queue();
+		}
+		if (msg.getContentDisplay().equals("Mark")) {
+			objChannel.sendMessage("But why?").queue();
+		}
+		if (msg.getContentDisplay().equals("Will")) {
+			objChannel.sendMessage("Sooooy Booooooy!!").queue();
+		}
+		if (msg.getContentDisplay().equals("Kevin!")) {
+			objChannel.sendMessage("HUEHUEHUE :joy:").queue();
 		}
 		if (msg.getContentDisplay().equals("good bot")) {
 			objChannel.sendMessage(":yum:").queue();
@@ -67,7 +76,7 @@ public class App extends ListenerAdapter {
 		/*
 		 * The commands will be done by searching for "command: !z followed by a command
 		 */
-		if (msg.getContentDisplay().charAt(0) == 'z') { //Is the string a command?
+		if (msg.getContentDisplay().charAt(0) == '.') { //Is the string a command?
 			String[] cmd_Args = msg.getContentDisplay().substring(1).split(" "); // command arguments
 			
 			// ROLL A DIE FOR DND AHAHAHAHA :P
@@ -76,40 +85,55 @@ public class App extends ListenerAdapter {
 			 * example: !z roll 1d8
 			 */
 			if (cmd_Args[0].equals("roll")) {
-				int sides = 6; // number of sides
-				int numrolls = 1; // number of 
-				
-				if (cmd_Args.length > 1) { // Get the information for the roll
-					sides = Integer.parseInt(cmd_Args[1].substring(2,3));
-					numrolls = Integer.parseInt(cmd_Args[1].substring(0,1));
-					
-				} // end if
-				
-				// Loop and roll for each request
-				String rolls = (objUser.getAsMention() + " rolls: " + "\n\n");
-				int sum = 0;
-				for (int i = 0; i < numrolls; i ++) { // roll and add to the string of rolls
-					int new_roll = ((int) Math.ceil(Math.random() * sides)); // roll
-					sum = sum + new_roll; // add to sum
-					rolls = (rolls + new_roll + " "); // string appending
-				}
-				rolls = (rolls + "\nThe Sum is: " + sum);
-				// Final string is done to just output
-				objChannel.sendMessage(rolls).queue();
+				Rolls(msg,objChannel,objUser);
 			
+			}
+			if (cmd_Args[0].equals("pal")) {
+				Pal(msg,objChannel,objUser);
+			}
 			
-			} else if (cmd_Args[0].equals("pal")) {
-				String strPal = cmd_Args[1];
-				boolean blnPal = true;
-				for (int i = 0; i < strPal.length(); i++) {
-					if (strPal.charAt(i) != strPal.charAt(strPal.length() - 1 - i)) {
-						blnPal = false;
-					}
-				}
-				objChannel.sendMessage(strPal + " is a palindrome: " + blnPal).queue();
-			}//End if
 		}// End if
 
 	} // End Message Received Listener
-
+	
+	
+	// Dice rolling 
+	public void Rolls(Message msg, MessageChannel objChannel, User objUser) {
+		String[] cmd_Args = msg.getContentDisplay().substring(1).split(" ");
+		int sides = 6; // number of sides
+		int numrolls = 1; // number of 
+		
+		if (cmd_Args.length > 1) { // Get the information for the roll
+			sides = Integer.parseInt(cmd_Args[1].substring(2,3));
+			numrolls = Integer.parseInt(cmd_Args[1].substring(0,1));
+			
+		} // end if
+		
+		// Loop and roll for each request
+		String rolls = (objUser.getAsMention() + " rolls: " + "\n\n");
+		int sum = 0;
+		for (int i = 0; i < numrolls; i ++) { // roll and add to the string of rolls
+			int new_roll = ((int) Math.ceil(Math.random() * sides)); // roll
+			sum = sum + new_roll; // add to sum
+			rolls = (rolls + new_roll + " "); // string appending
+		}
+		rolls = (rolls + "\nThe Sum is: " + sum);
+		// Final string is done to just output
+		objChannel.sendMessage(rolls).queue();
+	}// End Roll
+	
+	
+	// Palindromes
+	public void Pal(Message msg, MessageChannel objChannel, User objUser) {
+		String strPal = (msg.getContentDisplay().substring(1).split(" "))[1];
+		boolean blnPal = true;
+		for (int i = 0; i < strPal.length(); i++) {
+			if (strPal.charAt(i) != strPal.charAt(strPal.length() - 1 - i)) {
+				blnPal = false;
+			}
+		} // End for
+		objChannel.sendMessage("is " + strPal + " a palindrome?\n" + blnPal).queue();
+	} // End Pal
+	
+	
 } // Ends Class

@@ -22,7 +22,7 @@ public class App extends ListenerAdapter {
 
 		// Initialize Zoloro
 		JDA zoloro = new JDABuilder(AccountType.BOT)
-				.setToken("NDAxNTcwNDU4NjM5NTMyMDMz.DTxnLg.LtD7sUT-thEtHTlZV69Dg5NmbFM").buildBlocking();
+				.setToken(Constants.TOKEN).buildBlocking();
 		zoloro.addEventListener(new App()); // just let's it be aware of benjamoon basically
 	} // End Main Method.
 

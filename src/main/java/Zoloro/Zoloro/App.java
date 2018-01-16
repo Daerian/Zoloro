@@ -67,7 +67,9 @@ public class App extends ListenerAdapter {
 		if (msg.getContentDisplay().equals("good bot")) {
 			objChannel.sendMessage(":yum:").queue();
 		}
-		
+		if (msg.getContentDisplay().equals("Daerian")) {
+			objChannel.sendMessage("Derek's new bitch").queue();
+		}
 
 		//////////////////////////////////
 		/////// COMMANDS SECTION ////////

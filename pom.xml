@@ -27,7 +27,27 @@
 	    <artifactId>JDA</artifactId>
 	    <version>3.5.0_327</version>
 	</dependency>
+	<dependency>
+		<groupId>se.michaelthelin.spotify</groupId>
+		<artifactId>spotify-web-api-java</artifactId>
+		<version>1.5.0</version>
+	</dependency>
+	<dependency>
+	  <groupId>se.michaelthelin.spotify</groupId>
+	  <artifactId>spotify-web-api-java</artifactId>
+	  <version>1.5.0</version>
+	  <classifier>javadoc</classifier>
+	</dependency>
+	<dependency>
+	  <groupId>se.michaelthelin.spotify</groupId>
+	  <artifactId>spotify-web-api-java</artifactId>
+	  <version>1.5.0</version>
+	  <classifier>sources</classifier>
+	</dependency>
+	
   </dependencies>
+  
+  
   <repositories>
   	<repository>
 	    	<id>jcenter</id>

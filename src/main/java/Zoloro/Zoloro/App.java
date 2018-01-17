@@ -8,12 +8,23 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.SettableFuture;
+import com.wrapper.spotify.Api;
+import com.wrapper.spotify.methods.authentication.ClientCredentialsGrantRequest;
+import com.wrapper.spotify.models.ClientCredentials;
+
 import javax.security.auth.login.LoginException;
 
 public class App extends ListenerAdapter {
+	
+	public Commands cmd = new Commands();
 
 	// MAIN MEATHOD
 
@@ -24,8 +35,43 @@ public class App extends ListenerAdapter {
 		JDA zoloro = new JDABuilder(AccountType.BOT)
 				.setToken(Constants.TOKEN).buildBlocking();
 		zoloro.addEventListener(new App()); // just let's it be aware of benjamoon basically
-	} // End Main Method.
+		
+		//Spotify API
+		final Api api = Api.builder()
+				  .clientId(Constants.SPOTIFYCID)
+				  .clientSecret(Constants.STOKEN)
+				  .redirectURI(Constants.RedUri)
+				  .build();
+		
+		/* Create a request object. */
+		ClientCredentialsGrantRequest request = api.clientCredentialsGrant().build();
 
+		/* Use the request object to make the request, either asynchronously (getAsync) or synchronously (get) */
+		SettableFuture<ClientCredentials> responseFuture = request.getAsync();
+
+		/* Add callbacks to handle success and failure */
+		Futures.addCallback(responseFuture, new FutureCallback<ClientCredentials>() {
+		  public void onSuccess(ClientCredentials clientCredentials) {
+		    /* The tokens were retrieved successfully! */
+		    System.out.println("Successfully retrieved an access token! " + clientCredentials.getAccessToken());
+		    System.out.println("The access token expires in " + clientCredentials.getExpiresIn() + " seconds");
+		    
+		    /* Set access token on the Api object so that it's used going forward */
+		    api.setAccessToken(clientCredentials.getAccessToken());
+		    
+		    /* Please note that this flow does not return a refresh token.
+		   * That's only for the Authorization code flow */
+		  }
+
+		  public void onFailure(Throwable throwable) {
+		    /* An error occurred while getting the access token. This is probably caused by the client id or
+		     * client secret is invalid. */
+		  }
+		});
+		
+	} // End Main Method.
+	
+	
 	
 	// MESSAGE RECEIVED MEATHOD -- For your own foolery, write any nonsense
 	@Override
@@ -35,40 +81,41 @@ public class App extends ListenerAdapter {
 		Message msg = e.getMessage();
 		MessageChannel objChannel = e.getChannel();
 		User objUser = e.getAuthor();
+		String disp = msg.getContentDisplay();
 
 		// Responds to any user who says "hello"
-		if (msg.getContentDisplay().equals("hello")) {
+		if (disp.equals("hello")||disp.equals("Hello")) {
 			objChannel.sendMessage("What's up, " + objUser.getAsMention() + "? How's Godfrey's Booty?").queue();
 		}
-		if (msg.getContentDisplay().equals("Iggy")) {
+		if (disp.equals("Iggy")) {
 			objChannel.sendMessage("Ahhh, derek's old bitch").queue();
 		}
-		if (msg.getContentDisplay().equals("Derek")) {
+		if (disp.equals("Derek")) {
 			objChannel.sendMessage("Will you be my haram babyyy?").queue();
 		}
-		if (msg.getContentDisplay().equals("Suren")) {
+		if (disp.equals("Suren")) {
 			objChannel.sendMessage("how traingularly vascular!").queue();
 		}
-		if (msg.getContentDisplay().equals("Zoloro")) {
+		if (disp.equals("Zoloro")) {
 			objChannel.sendMessage("That's me! Daerian made me, Dae is Bae, right? :yum:").queue();
 		}
-		if (msg.getContentDisplay().equals("Godfrey")) {
-			objChannel.sendMessage("AIIIIIIMM TAAAIIIREEEDD ... What's 1000-7 ... PLEB?").queue();
+		if (disp.equals("Godfrey")) {
+			objChannel.sendMessage("Fuck you pleb").queue();
 		}
-		if (msg.getContentDisplay().equals("Mark")) {
+		if (disp.equals("Mark")) {
 			objChannel.sendMessage("But why?").queue();
 		}
-		if (msg.getContentDisplay().equals("Will")) {
+		if (disp.equals("Will")) {
 			objChannel.sendMessage("Sooooy Booooooy!!").queue();
 		}
-		if (msg.getContentDisplay().equals("Kevin!")) {
+		if (disp.equals("Kevin!")) {
 			objChannel.sendMessage("HUEHUEHUE :joy:").queue();
 		}
-		if (msg.getContentDisplay().equals("good bot")) {
+		if (disp.equals("good bot")) {
 			objChannel.sendMessage(":yum:").queue();
 		}
-		if (msg.getContentDisplay().equals("Daerian")) {
-			objChannel.sendMessage("Derek's new bitch").queue();
+		if (disp.equals("Daerian")) {
+			objChannel.sendMessage("Playa Playa").queue();
 		}
 
 		//////////////////////////////////

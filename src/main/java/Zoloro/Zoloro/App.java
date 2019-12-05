@@ -17,8 +17,12 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
 import com.wrapper.spotify.Api;
+import com.wrapper.spotify.methods.AlbumRequest;
 import com.wrapper.spotify.methods.authentication.ClientCredentialsGrantRequest;
+import com.wrapper.spotify.models.Album;
 import com.wrapper.spotify.models.ClientCredentials;
+
+import java.util.List;
 
 import javax.security.auth.login.LoginException;
 
@@ -68,6 +72,22 @@ public class App extends ListenerAdapter {
 		     * client secret is invalid. */
 		  }
 		});
+		// Create a request object for the type of request you want to make
+		AlbumRequest albrequest = api.getAlbum("7e0ij2fpWaxOEHv5fUYZjd").build();
+
+		// Retrieve an album
+		try {
+		  Album album = albrequest.get();
+		  
+		  // Print the genres of the album
+		  List<String> genres = album.getGenres(); 
+		  for (String genre : genres) {
+		    System.out.println(genre);
+		  };
+		  
+		} catch (Exception e) {
+		  System.out.println("Could not get albums.");
+		}
 		
 	} // End Main Method.
 	
